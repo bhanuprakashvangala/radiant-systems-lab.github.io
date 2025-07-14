@@ -13,60 +13,99 @@ You can also find our articles on our
 <a href="https://scholar.google.com/citations?hl=en&user=ZvYwdsUAAAAJ">Google Scholar profile</a>.
 </p>
 
-{% assign publications = site.data.publications %}
-{% assign years = publications | map: 'Year' | uniq | sort | reverse %}
-{% for year in years %}
-<h3 class="pubyear">{{ year }}</h3>
-<ol>
-{% for pub in publications %}
-  {% if pub.Year == year %}
-    <li class="pub-entry">
-      <span class="pub-title">{{ pub.title }}</span><br>
-      <span class="pub-authors">{{ pub.Authors }}</span><br>
-      <em>{% if pub.Book %}{{ pub.Book }}{% elsif pub.Journal %}{{ pub.Journal }}{% elsif pub.Conference %}{{ pub.Conference }}{% elsif pub.Publisher %}{{ pub.Publisher }}{% endif %}</em>
-      <div class="pub-icons">
-        {% if pub.Description %}
-          <a href="javascript:void(0);" onclick="toggleSection('abs-{{ pub.id }}')" class="pub-action"><i class="fas fa-file-alt"></i> Abstract</a>
-        {% else %}
-          <i class="fas fa-file-alt disabled"></i>
-        {% endif %}
-        <a href="javascript:void(0);" onclick="toggleSection('bib-{{ pub.id }}')" class="pub-action"><i class="fas fa-code"></i> BibTeX</a>
-        {% if pub.pdf_link %}
-          <a href="{{ pub.pdf_link }}" target="_blank" class="pub-action"><i class="fas fa-file-pdf"></i> PDF</a>
-        {% else %}
-          {% assign pdfName = pub.id | split: '-' | last | append: '.pdf' | prepend: '/pdfs/pdfs/pubs/' %}
-          {% assign hasPdf = site.static_files | map:'path' | join:' ' | contains: pdfName %}
-          {% if hasPdf %}
-            <a href="{{ pdfName }}" target="_blank" class="pub-action"><i class="fas fa-file-pdf"></i> PDF</a>
-          {% else %}
-            <i class="fas fa-file-pdf disabled"></i>
-          {% endif %}
-        {% endif %}
-      </div>
-      {% if pub.Description %}
-      <div id="abs-{{ pub.id }}" class="pub-abstract">
-        <strong>Abstract:</strong> {{ pub.Description }}
-      </div>
-      {% endif %}
+<div class="navbar">
+  <div class="navbar-inner">
+    <ul id="pub-tabs" class="nav nav-tabs">
+      <li id="tab-article" class="active"><a href="javascript:showPubType('Article')">Articles</a></li>
+      <li id="tab-chapter"><a href="javascript:showPubType('Chapter')">Chapters</a></li>
+      <li id="tab-dissertation"><a href="javascript:showPubType('Dissertation')">Dissertations</a></li>
+      <li id="tab-editorial"><a href="javascript:showPubType('Editorial')">Editorials</a></li>
+      <li id="tab-other"><a href="javascript:showPubType('Other')">Others</a></li>
+    </ul>
+  </div>
+</div>
 
-      <pre id="bib-{{ pub.id }}" class="pub-bibtex">@article{ {{ pub.id }},
-  title = { {{ pub.title }} },
-  author = { {{ pub.bibAuthors | default: pub.Authors }} },
-  {% if pub.Journal %}journal = { {{ pub.Journal }} },{% endif %}
-  {% if pub.Publisher %}publisher = { {{ pub.Publisher }} },{% endif %}
-  year = {{ pub.Year }},
+<div id="pub-lists">
+  {% assign types = "Article,Chapter,Dissertation,Editorial,Other" | split: "," %}
+  {% for t in types %}
+    <div id="pub-{{ t | downcase }}" class="pub-type{% if forloop.first %} active{% endif %}">
+      {% assign pubs_of_type = site.data.publications | where: 'Type', t %}
+      {% assign years = pubs_of_type | map: 'Year' | uniq | sort | reverse %}
+      {% for y in years %}
+        <h3 class="pubyear">{{ y }}</h3>
+        <ol>
+        {% for p in pubs_of_type %}
+          {% if p.Year == y %}
+            <li class="pub-entry">
+              <span class="pub-title">{{ p.title }}</span><br>
+              <span class="pub-authors">{{ p.Authors }}</span><br>
+              <em>
+                {% if p.Book %}{{ p.Book }}
+                {% elsif p.Journal %}{{ p.Journal }}
+                {% elsif p.Conference %}{{ p.Conference }}
+                {% elsif p.Publisher %}{{ p.Publisher }}
+                {% endif %}
+              </em>
+              <div class="pub-icons">
+                {% if p.Description %}
+                  <a href="javascript:void(0);" onclick="toggleSection('abs-{{ p.id }}')" class="pub-action">
+                    <i class="fas fa-file-alt"></i> Abstract
+                  </a>
+                {% else %}
+                  <i class="fas fa-file-alt disabled"></i>
+                {% endif %}
+                <a href="javascript:void(0);" onclick="toggleSection('bib-{{ p.id }}')" class="pub-action">
+                  <i class="fas fa-code"></i> BibTeX
+                </a>
+                {% if p.pdf_link %}
+                  <a href="{{ p.pdf_link }}" target="_blank" class="pub-action">
+                    <i class="fas fa-file-pdf"></i> PDF
+                  </a>
+                {% else %}
+                  {% assign pdfName = p.id | split: '-' | last | append: '.pdf' | prepend: '/pdfs/pdfs/pubs/' %}
+                  {% assign hasPdf = site.static_files | map:'path' | join:' ' | contains: pdfName %}
+                  {% if hasPdf %}
+                    <a href="{{ pdfName }}" target="_blank" class="pub-action">
+                      <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                  {% else %}
+                    <i class="fas fa-file-pdf disabled"></i>
+                  {% endif %}
+                {% endif %}
+              </div>
+              {% if p.Description %}
+                <div id="abs-{{ p.id }}" class="pub-abstract">
+                  <strong>Abstract:</strong> {{ p.Description }}
+                </div>
+              {% endif %}
+              <pre id="bib-{{ p.id }}" class="pub-bibtex">@article{ {{ p.id }},
+  title = { {{ p.title }} },
+  author = { {{ p.bibAuthors | default: p.Authors }} },
+  {% if p.Journal %}journal = { {{ p.Journal }} },{% endif %}
+  {% if p.Publisher %}publisher = { {{ p.Publisher }} },{% endif %}
+  year = {{ p.Year }},
 }</pre>
-
-    </li>
-  {% endif %}
-{% endfor %}
-</ol>
-{% endfor %}
+            </li>
+          {% endif %}
+        {% endfor %}
+        </ol>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
 
 <script>
-function toggleSection(sectionId){
-  var el = document.getElementById(sectionId);
-  if(!el) return;
-  el.classList.toggle('show');
+function showPubType(type){
+  document.querySelectorAll('.pub-type').forEach(div => {
+    div.id === 'pub-'+type.toLowerCase() ? div.classList.add('active') : div.classList.remove('active');
+  });
+  document.querySelectorAll('#pub-tabs li').forEach(li => {
+    li.id === 'tab-'+type.toLowerCase() ? li.classList.add('active') : li.classList.remove('active');
+  });
+}
+
+function toggleSection(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('show');
 }
 </script>
