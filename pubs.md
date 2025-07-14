@@ -40,15 +40,15 @@ You can also find my articles on my
       <em>{% if pub.Book %}{{ pub.Book }}{% elsif pub.Journal %}{{ pub.Journal }}{% elsif pub.Conference %}{{ pub.Conference }}{% elsif pub.Publisher %}{{ pub.Publisher }}{% endif %}</em>
       <div class="pub-icons">
         {% if pub.Description %}
+
+          <a href="javascript:void(0);" onclick="toggleSection('abs-{{ pub.id }}')"><i class="fas fa-file-alt"></i></a>
+
           <a href="javascript:void(0);" onclick="toggleAbstract('{{ pub.id }}')"><i class="fas fa-file-alt"></i></a>
+
         {% else %}
           <i class="fas fa-file-alt disabled"></i>
         {% endif %}
-        {% if pub.bibtex_link %}
-          <a href="{{ pub.bibtex_link }}" target="_blank"><i class="fas fa-code"></i></a>
-        {% else %}
-          <i class="fas fa-code disabled"></i>
-        {% endif %}
+        <a href="javascript:void(0);" onclick="toggleSection('bib-{{ pub.id }}')"><i class="fas fa-code"></i></a>
         {% if pub.pdf_link %}
           <a href="{{ pub.pdf_link }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
         {% else %}
@@ -66,6 +66,16 @@ You can also find my articles on my
         {{ pub.Description }}
       </div>
       {% endif %}
+
+      <pre id="bib-{{ pub.id }}" class="pub-bibtex" style="display:none;">@article{ {{ pub.id }},
+  title = { {{ pub.title }} },
+  author = { {{ pub.bibAuthors | default: pub.Authors }} },
+  {% if pub.Journal %}journal = { {{ pub.Journal }} },{% endif %}
+  {% if pub.Publisher %}publisher = { {{ pub.Publisher }} },{% endif %}
+  year = {{ pub.Year }},
+}</pre>
+
+
     </li>
   {% endif %}
 {% endfor %}
@@ -89,15 +99,15 @@ You can also find my articles on my
             <em>{{ p.venue }}</em>
             <div class="pub-icons">
               {% if p.Description %}
+
+                <a href="javascript:void(0);" onclick="toggleSection('abs-{{ p.id }}')"><i class="fas fa-file-alt"></i></a>
+
                 <a href="javascript:void(0);" onclick="toggleAbstract('{{ p.id }}')"><i class="fas fa-file-alt"></i></a>
+
               {% else %}
                 <i class="fas fa-file-alt disabled"></i>
               {% endif %}
-              {% if p.bibtex_link %}
-                <a href="{{ p.bibtex_link }}" target="_blank"><i class="fas fa-code"></i></a>
-              {% else %}
-                <i class="fas fa-code disabled"></i>
-              {% endif %}
+              <a href="javascript:void(0);" onclick="toggleSection('bib-{{ p.id }}')"><i class="fas fa-code"></i></a>
               {% if p.pdf_link %}
                 <a href="{{ p.pdf_link }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
               {% else %}
@@ -115,6 +125,13 @@ You can also find my articles on my
               {{ p.Description }}
             </div>
             {% endif %}
+
+            <pre id="bib-{{ p.id }}" class="pub-bibtex" style="display:none;">@article{ {{ p.id }},
+  title = { {{ p.title }} },
+  author = { {{ p.bibAuthors | default: p.Authors }} },
+  {% if p.venue %}journal = { {{ p.venue }} },{% endif %}
+  year = {{ p.year }},
+}</pre>
           </li>
         {% endif %}
       {% endfor %}
@@ -144,6 +161,7 @@ function showPubType(type){
 
 function toggleAbstract(id){
   var el = document.getElementById('abs-' + id);
+
   if(!el) return;
   if(el.style.display === 'none' || el.style.display === ''){
     el.style.display = 'block';

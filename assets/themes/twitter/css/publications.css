@@ -24,7 +24,18 @@
 .pub-type.active { display: block; }
 
 .pub-abstract {
-  margin-top: 5px;
+  margin: 8px 0 8px 20px;
+  padding: 6px 10px;
+  background: #f9f9f9;
+  border-left: 3px solid #ddd;
   font-style: italic;
 }
 
+.pub-bibtex {
+  margin: 8px 0 8px 20px;
+  padding: 6px 10px;
+  background: #f9f9f9;
+  border-left: 3px solid #ddd;
+  font-family: monospace;
+  white-space: pre;
+}
