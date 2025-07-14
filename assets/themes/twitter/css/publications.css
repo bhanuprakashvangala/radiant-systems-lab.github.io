@@ -1,101 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
-.pub-icons a {
-  margin-right: 10px;
-  color: #555;
-  text-decoration: none;
-  font-size: 1.3em;
-  font-family: 'Roboto', sans-serif;
-}
-.pub-icons a:hover {
-  color: #000;
-}
-.pub-icons i {
-  margin-right: 10px;
-  color: #555;
-  font-size: 1.3em;
-}
-.pub-icons i.disabled {
-  color: #ccc;
-}
-
 .pub-type { display: none; }
 .pub-type.active { display: block; }
-
-.pub-abstract {
-  background-color: #f6f8fa;
-  padding: 10px 15px;
-  border-radius: 6px;
-  margin-top: 8px;
-  line-height: 1.6;
-  font-size: 1.05em;
-  display: none;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  font-family: 'Roboto', sans-serif;
-}
-.pub-abstract.show {
-  display: block;
-  opacity: 1;
-  max-height: 1000px;
-}
-
-.pub-bibtex {
-  margin-top: 8px;
-  padding: 10px 15px;
-  background: #f6f8fa;
-  border-radius: 6px;
-  font-family: monospace;
-  white-space: pre;
-  font-size: 0.95em;
-  line-height: 1.6;
-  display: none;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-.pub-bibtex.show {
-  display: block;
-  opacity: 1;
-  max-height: 1000px;
-}
-
-.pub-entry {
-  font-size: 1.1em;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e0e0e0;
-  font-family: 'Roboto', sans-serif;
-  background-color: #fff;
-}
-
-.pub-title {
-  font-size: 1.4em;
-  font-weight: bold;
-  color: #222;
-}
-
-.pub-icons {
-  border-top: 1px solid #ccc;
-  padding-top: 8px;
-  margin-top: 8px;
-  display: flex;
-  gap: 10px;
-}
-
-.pub-action {
-  display: inline-block;
-  border: 1px solid #888;
-  border-radius: 4px;
-  padding: 2px 8px;
-  background-color: #eee;
-  font-size: 0.9em;
-  cursor: pointer;
-}
 
 .pubyear {
   font-size: 1.75em;
@@ -105,8 +11,105 @@
   border-bottom: 2px solid #ddd;
 }
 
-.pub-abstract,
-.pub-bibtex {
-  border-left: 4px solid #999;
+.pub-entry {
+  font-size: 1.1em;
+  line-height: 1.7;
+  margin-bottom: 25px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
+.pub-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #222;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.pub-authors {
+  font-size: 1.1em;
+  color: #555;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.pub-icons {
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pub-action {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #888;
+  border-radius: 4px;
+  padding: 4px 10px;
+  background-color: #f2f2f2;
+  font-size: 0.9em;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.pub-action:hover {
+  background-color: #e0e0e0;
+  border-color: #555;
+}
+
+.pub-icons i.disabled {
+  color: #ccc;
+}
+
+.pub-abstract,
+.pub-bibtex {
+  background-color: #f6f8fa;
+  padding: 12px 16px;
+  border-left: 4px solid #999;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-size: 1.1em;
+  line-height: 1.6;
+  display: none;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.pub-abstract.show,
+.pub-bibtex.show {
+  display: block;
+  opacity: 1;
+  max-height: 1500px;
+}
+
+.pub-bibtex {
+  font-family: monospace;
+  white-space: pre;
+}
+
+@media (max-width: 768px) {
+  .pub-entry {
+    padding: 15px;
+  }
+
+  .pub-title {
+    font-size: 1.3em;
+  }
+
+  .pub-authors {
+    font-size: 1em;
+  }
+
+  .pub-action {
+    font-size: 0.85em;
+    padding: 3px 8px;
+  }
+}
