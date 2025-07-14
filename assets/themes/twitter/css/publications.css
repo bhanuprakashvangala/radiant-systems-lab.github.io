@@ -4,6 +4,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+.nav.nav-tabs {
+  margin-bottom: 20px;
+}
+
 .pub-type { display: none; }
 .pub-type.active { display: block; }
 
@@ -106,15 +110,12 @@ body {
   .pub-entry {
     padding: 15px;
   }
-
   .pub-title {
     font-size: 1.3em;
   }
-
   .pub-authors {
     font-size: 1em;
   }
-
   .pub-action {
     font-size: 0.9em;
     padding: 4px 10px;
