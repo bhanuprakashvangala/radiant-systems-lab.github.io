@@ -36,18 +36,15 @@ You can also find my articles on my
   {% if pub.Year == year %}
     <li>
       {{ pub.title }}<br>
+      <span class="pub-authors">{{ pub.Authors }}</span><br>
       <em>{% if pub.Book %}{{ pub.Book }}{% elsif pub.Journal %}{{ pub.Journal }}{% elsif pub.Conference %}{{ pub.Conference }}{% elsif pub.Publisher %}{{ pub.Publisher }}{% endif %}</em>
       <div class="pub-icons">
-        {% if pub.abstract_link %}
-          <a href="{{ pub.abstract_link }}" target="_blank"><i class="fas fa-file-alt"></i></a>
+        {% if pub.Description %}
+          <a href="javascript:void(0);" onclick="toggleSection('abs-{{ pub.id }}')"><i class="fas fa-file-alt"></i></a>
         {% else %}
           <i class="fas fa-file-alt disabled"></i>
         {% endif %}
-        {% if pub.bibtex_link %}
-          <a href="{{ pub.bibtex_link }}" target="_blank"><i class="fas fa-code"></i></a>
-        {% else %}
-          <i class="fas fa-code disabled"></i>
-        {% endif %}
+        <a href="javascript:void(0);" onclick="toggleSection('bib-{{ pub.id }}')"><i class="fas fa-code"></i></a>
         {% if pub.pdf_link %}
           <a href="{{ pub.pdf_link }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
         {% else %}
@@ -60,6 +57,18 @@ You can also find my articles on my
           {% endif %}
         {% endif %}
       </div>
+      {% if pub.Description %}
+      <div id="abs-{{ pub.id }}" class="pub-abstract" style="display:none;">
+        {{ pub.Description }}
+      </div>
+      {% endif %}
+      <pre id="bib-{{ pub.id }}" class="pub-bibtex" style="display:none;">@article{ {{ pub.id }},
+  title = { {{ pub.title }} },
+  author = { {{ pub.bibAuthors | default: pub.Authors }} },
+  {% if pub.Journal %}journal = { {{ pub.Journal }} },{% endif %}
+  {% if pub.Publisher %}publisher = { {{ pub.Publisher }} },{% endif %}
+  year = {{ pub.Year }},
+}</pre>
     </li>
   {% endif %}
 {% endfor %}
@@ -79,18 +88,15 @@ You can also find my articles on my
         {% if p.year == y %}
           <li>
             {{ p.title }}<br>
+            <span class="pub-authors">{{ p.Authors }}</span><br>
             <em>{{ p.venue }}</em>
             <div class="pub-icons">
-              {% if p.abstract_link %}
-                <a href="{{ p.abstract_link }}" target="_blank"><i class="fas fa-file-alt"></i></a>
+              {% if p.Description %}
+                <a href="javascript:void(0);" onclick="toggleSection('abs-{{ p.id }}')"><i class="fas fa-file-alt"></i></a>
               {% else %}
                 <i class="fas fa-file-alt disabled"></i>
               {% endif %}
-              {% if p.bibtex_link %}
-                <a href="{{ p.bibtex_link }}" target="_blank"><i class="fas fa-code"></i></a>
-              {% else %}
-                <i class="fas fa-code disabled"></i>
-              {% endif %}
+              <a href="javascript:void(0);" onclick="toggleSection('bib-{{ p.id }}')"><i class="fas fa-code"></i></a>
               {% if p.pdf_link %}
                 <a href="{{ p.pdf_link }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
               {% else %}
@@ -103,6 +109,17 @@ You can also find my articles on my
                 {% endif %}
               {% endif %}
             </div>
+            {% if p.Description %}
+            <div id="abs-{{ p.id }}" class="pub-abstract" style="display:none;">
+              {{ p.Description }}
+            </div>
+            {% endif %}
+            <pre id="bib-{{ p.id }}" class="pub-bibtex" style="display:none;">@article{ {{ p.id }},
+  title = { {{ p.title }} },
+  author = { {{ p.bibAuthors | default: p.Authors }} },
+  {% if p.venue %}journal = { {{ p.venue }} },{% endif %}
+  year = {{ p.year }},
+}</pre>
           </li>
         {% endif %}
       {% endfor %}
@@ -128,6 +145,16 @@ function showPubType(type){
       li.classList.remove('active');
     }
   });
+}
+
+function toggleSection(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  if(el.style.display === 'none' || el.style.display === ''){
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
 }
 </script>
 
