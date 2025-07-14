@@ -28,7 +28,7 @@ title: Publications
   </div>
 </div>
 
-{% assign pubs = site.data.publications %}
+{% assign pubs  = site.data.publications %}
 {% assign years = pubs | map: "Year" | uniq | sort | reverse %}
 
 <div id="pub-list">
@@ -37,10 +37,10 @@ title: Publications
     <ol>
       {% for p in pubs %}
         {% if p.Year == y %}
-          {% assign isArticle     = p.Journal or p.Conference %}
-          {% assign isChapter     = p.Book %}
-          {% assign isDissertation= p.Institution %}
-          {% assign isOther       = not (isArticle or isChapter or isDissertation) %}
+          {% assign isArticle      = p.Conference or p.Journal %}
+          {% assign isChapter      = p.Book %}
+          {% assign isDissertation = p.Institution %}
+          {% assign isOther        = not (isArticle or isChapter or isDissertation) %}
           {% assign klass = 
                isArticle      and 'type-article'      or
                isChapter      and 'type-chapter'      or
@@ -48,10 +48,8 @@ title: Publications
                isOther         and 'type-other'
           %}
           <li class="pub-entry {{ klass }}">
-            <div class="pub-header">
-              <span class="pub-title">{{ p.title }}</span>
-              <span class="pub-authors">{{ p.Authors }}</span>
-            </div>
+            <h4 class="pub-title">{{ p.title }}</h4>
+            <div class="pub-authors">{{ p.Authors }}</div>
             <div class="pub-venue">
               <em>
                 {% if p.Book       %}{{ p.Book       }}
@@ -61,48 +59,41 @@ title: Publications
                 {% endif %}
               </em>
             </div>
+
             <div class="pub-icons">
-              <button class="pub-action" onclick="toggleSection('abs-{{ p.id }}')">
-                <i class="fas fa-file-alt"></i> Abstract
-              </button>
-              <button class="pub-action" onclick="toggleSection('bib-{{ p.id }}')">
+              {% if p.Description %}
+                <button class="pub-action"
+                        onclick="toggleSection('abs-{{ p.id }}')">
+                  <i class="fas fa-file-alt"></i> Abstract
+                </button>
+              {% endif %}
+              <button class="pub-action"
+                      onclick="toggleSection('bib-{{ p.id }}')">
                 <i class="fas fa-code"></i> BibTeX
               </button>
               {% if p.pdf_link %}
-                <a href="{{ p.pdf_link }}" target="_blank" class="pub-action">
+                <a href="{{ p.pdf_link }}"
+                   class="pub-action" target="_blank">
                   <i class="fas fa-file-pdf"></i> PDF
                 </a>
-              {% else %}
-                {% assign fn = p.id | split:"-" | last | append:".pdf" | prepend:"/pdfs/pdfs/pubs/" %}
-                {% assign hasPdf = site.static_files | map:"path" | join:" " | contains: fn %}
-                {% if hasPdf %}
-                  <a href="{{ fn }}" target="_blank" class="pub-action">
-                    <i class="fas fa-file-pdf"></i> PDF
-                  </a>
-                {% else %}
-                  <span class="pub-action disabled">
-                    <i class="fas fa-file-pdf"></i> PDF
-                  </span>
-                {% endif %}
               {% endif %}
             </div>
+
             {% if p.Description %}
               <div id="abs-{{ p.id }}" class="pub-section pub-abstract">
-                <h4>Abstract</h4>
                 <p>{{ p.Description }}</p>
               </div>
             {% endif %}
+
             <div id="bib-{{ p.id }}" class="pub-section pub-bibtex">
-              <h4>BibTeX</h4>
-              <pre>
-@article{ {{ p.id }},
+<pre>@article{ {{ p.id }},
   title     = { {{ p.title }} },
   author    = { {{ p.bibAuthors | default: p.Authors }} },
   {% if p.Journal   %}journal   = { {{ p.Journal }} },{% endif %}
   {% if p.Publisher %}publisher = { {{ p.Publisher }} },{% endif %}
   year      = {{ p.Year }},
 }
-              </pre>
+</pre>
             </div>
           </li>
         {% endif %}
@@ -112,28 +103,28 @@ title: Publications
 </div>
 
 <script>
+// Default to “All”
 document.addEventListener("DOMContentLoaded", ()=>showPubType('all'));
 
 function showPubType(type) {
-  // show/hide each entry by class
-  document.querySelectorAll('.pub-entry').forEach(li=>{
-    li.style.display = (type==='all' || li.classList.contains('type-'+type))
-                       ? '' : 'none';
+  document.querySelectorAll('.pub-entry').forEach(li => {
+    li.style.display =
+      (type==='all' || li.classList.contains('type-'+type)) ? '' : 'none';
   });
-  // hide any year with no visible children
-  document.querySelectorAll('.pubyear').forEach(h3=>{
+  document.querySelectorAll('.pubyear').forEach(h3 => {
     const ol = h3.nextElementSibling;
-    const any = ol && Array.from(ol.children).some(li=>li.style.display!=='none');
+    const any = ol && Array.from(ol.children)
+                         .some(li=>li.style.display!=='none');
     h3.style.display = ol.style.display = any ? '' : 'none';
   });
-  // update active nav
-  document.querySelectorAll('#pub-tabs li').forEach(li=>{
-    li.classList.toggle('active', li.id === 'tab-'+type);
+  document.querySelectorAll('#pub-tabs li').forEach(li => {
+    li.classList.toggle('active', li.id==='tab-'+type);
   });
 }
 
+// Toggle just the one section
 function toggleSection(id) {
   const el = document.getElementById(id);
-  el && el.classList.toggle('show');
+  if (el) el.classList.toggle('show');
 }
 </script>
