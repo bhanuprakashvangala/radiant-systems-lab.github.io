@@ -40,7 +40,11 @@ You can also find my articles on my
       <em>{% if pub.Book %}{{ pub.Book }}{% elsif pub.Journal %}{{ pub.Journal }}{% elsif pub.Conference %}{{ pub.Conference }}{% elsif pub.Publisher %}{{ pub.Publisher }}{% endif %}</em>
       <div class="pub-icons">
         {% if pub.Description %}
+
           <a href="javascript:void(0);" onclick="toggleSection('abs-{{ pub.id }}')"><i class="fas fa-file-alt"></i></a>
+
+          <a href="javascript:void(0);" onclick="toggleAbstract('{{ pub.id }}')"><i class="fas fa-file-alt"></i></a>
+
         {% else %}
           <i class="fas fa-file-alt disabled"></i>
         {% endif %}
@@ -62,6 +66,7 @@ You can also find my articles on my
         {{ pub.Description }}
       </div>
       {% endif %}
+
       <pre id="bib-{{ pub.id }}" class="pub-bibtex" style="display:none;">@article{ {{ pub.id }},
   title = { {{ pub.title }} },
   author = { {{ pub.bibAuthors | default: pub.Authors }} },
@@ -69,6 +74,8 @@ You can also find my articles on my
   {% if pub.Publisher %}publisher = { {{ pub.Publisher }} },{% endif %}
   year = {{ pub.Year }},
 }</pre>
+
+
     </li>
   {% endif %}
 {% endfor %}
@@ -92,7 +99,11 @@ You can also find my articles on my
             <em>{{ p.venue }}</em>
             <div class="pub-icons">
               {% if p.Description %}
+
                 <a href="javascript:void(0);" onclick="toggleSection('abs-{{ p.id }}')"><i class="fas fa-file-alt"></i></a>
+
+                <a href="javascript:void(0);" onclick="toggleAbstract('{{ p.id }}')"><i class="fas fa-file-alt"></i></a>
+
               {% else %}
                 <i class="fas fa-file-alt disabled"></i>
               {% endif %}
@@ -114,6 +125,7 @@ You can also find my articles on my
               {{ p.Description }}
             </div>
             {% endif %}
+
             <pre id="bib-{{ p.id }}" class="pub-bibtex" style="display:none;">@article{ {{ p.id }},
   title = { {{ p.title }} },
   author = { {{ p.bibAuthors | default: p.Authors }} },
@@ -147,8 +159,9 @@ function showPubType(type){
   });
 }
 
-function toggleSection(id){
-  var el = document.getElementById(id);
+function toggleAbstract(id){
+  var el = document.getElementById('abs-' + id);
+
   if(!el) return;
   if(el.style.display === 'none' || el.style.display === ''){
     el.style.display = 'block';
