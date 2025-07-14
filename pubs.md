@@ -18,12 +18,12 @@ title: Publications
 <div class="navbar">
   <div class="navbar-inner">
     <ul id="pub-tabs" class="nav nav-tabs">
-      <li id="tab-all"         class="active"><a href="javascript:showPubType('all')">All</a></li>
-      <li id="tab-article"               ><a href="javascript:showPubType('article')">Articles</a></li>
-      <li id="tab-chapter"               ><a href="javascript:showPubType('chapter')">Chapters</a></li>
-      <li id="tab-dissertation"          ><a href="javascript:showPubType('dissertation')">Dissertations</a></li>
-      <li id="tab-editorial"             ><a href="javascript:showPubType('editorial')">Editorials</a></li>
-      <li id="tab-other"                 ><a href="javascript:showPubType('other')">Others</a></li>
+      <li id="tab-all"         class="active"><a href="#" data-type="all">All</a></li>
+      <li id="tab-article"               ><a href="#" data-type="article">Articles</a></li>
+      <li id="tab-chapter"               ><a href="#" data-type="chapter">Chapters</a></li>
+      <li id="tab-dissertation"          ><a href="#" data-type="dissertation">Dissertations</a></li>
+      <li id="tab-editorial"             ><a href="#" data-type="editorial">Editorials</a></li>
+      <li id="tab-other"                 ><a href="#" data-type="other">Others</a></li>
     </ul>
   </div>
 </div>
@@ -37,17 +37,21 @@ title: Publications
     <ol>
       {% for p in pubs %}
         {% if p.Year == y %}
-          {% assign isArticle      = p.Conference or p.Journal %}
-          {% assign isChapter      = p.Book %}
-          {% assign isDissertation = p.Institution %}
-          {% assign isOther        = not (isArticle or isChapter or isDissertation) %}
-          {% assign klass = 
-               isArticle      and 'type-article'      or
-               isChapter      and 'type-chapter'      or
-               isDissertation and 'type-dissertation' or
-               isOther         and 'type-other'
-          %}
-          <li class="pub-entry {{ klass }}">
+          {% comment %}
+            Classify each pub by type. There's no YAML key for editorials,
+            so those are left out unless you add one later.
+          {% endcomment %}
+          {% if p.Conference or p.Journal %}
+            {% assign typeForP = "article" %}
+          {% elsif p.Book %}
+            {% assign typeForP = "chapter" %}
+          {% elsif p.Institution %}
+            {% assign typeForP = "dissertation" %}
+          {% else %}
+            {% assign typeForP = "other" %}
+          {% endif %}
+
+          <li class="pub-entry" data-type="{{ typeForP }}">
             <h4 class="pub-title">{{ p.title }}</h4>
             <div class="pub-authors">{{ p.Authors }}</div>
             <div class="pub-venue">
@@ -62,27 +66,27 @@ title: Publications
 
             <div class="pub-icons">
               {% if p.Description %}
-                <button class="pub-action"
-                        onclick="toggleSection('abs-{{ p.id }}')">
-                  <i class="fas fa-file-alt"></i> Abstract
-                </button>
+              <button class="pub-action"
+                      onclick="toggleSection('abs-{{ p.id }}')">
+                <i class="fas fa-file-alt"></i> Abstract
+              </button>
               {% endif %}
               <button class="pub-action"
                       onclick="toggleSection('bib-{{ p.id }}')">
                 <i class="fas fa-code"></i> BibTeX
               </button>
               {% if p.pdf_link %}
-                <a href="{{ p.pdf_link }}"
-                   class="pub-action" target="_blank">
-                  <i class="fas fa-file-pdf"></i> PDF
-                </a>
+              <a href="{{ p.pdf_link }}"
+                 class="pub-action" target="_blank">
+                <i class="fas fa-file-pdf"></i> PDF
+              </a>
               {% endif %}
             </div>
 
             {% if p.Description %}
-              <div id="abs-{{ p.id }}" class="pub-section pub-abstract">
-                <p>{{ p.Description }}</p>
-              </div>
+            <div id="abs-{{ p.id }}" class="pub-section pub-abstract">
+              <p>{{ p.Description }}</p>
+            </div>
             {% endif %}
 
             <div id="bib-{{ p.id }}" class="pub-section pub-bibtex">
@@ -103,26 +107,39 @@ title: Publications
 </div>
 
 <script>
-// Default to “All”
-document.addEventListener("DOMContentLoaded", ()=>showPubType('all'));
-
+// filter function
 function showPubType(type) {
   document.querySelectorAll('.pub-entry').forEach(li => {
     li.style.display =
-      (type==='all' || li.classList.contains('type-'+type)) ? '' : 'none';
+      (type === 'all' || li.getAttribute('data-type') === type)
+        ? '' : 'none';
   });
+  // hide empty year blocks
   document.querySelectorAll('.pubyear').forEach(h3 => {
     const ol = h3.nextElementSibling;
     const any = ol && Array.from(ol.children)
-                         .some(li=>li.style.display!=='none');
+                          .some(li=>li.style.display!== 'none');
     h3.style.display = ol.style.display = any ? '' : 'none';
   });
-  document.querySelectorAll('#pub-tabs li').forEach(li => {
-    li.classList.toggle('active', li.id==='tab-'+type);
+  // update active tab
+  document.querySelectorAll('#pub-tabs li').forEach(tab => {
+    const t = tab.querySelector('a').getAttribute('data-type');
+    tab.classList.toggle('active', t === type);
   });
 }
 
-// Toggle just the one section
+// wire up nav clicks
+document.querySelectorAll('#pub-tabs a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    showPubType(a.getAttribute('data-type'));
+  });
+});
+
+// default to All
+document.addEventListener('DOMContentLoaded', ()=> showPubType('all'));
+
+// toggles single section
 function toggleSection(id) {
   const el = document.getElementById(id);
   if (el) el.classList.toggle('show');
