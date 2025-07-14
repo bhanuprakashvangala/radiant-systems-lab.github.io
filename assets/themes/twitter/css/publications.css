@@ -23,3 +23,8 @@
 .pub-type { display: none; }
 .pub-type.active { display: block; }
 
+.pub-abstract {
+  margin-top: 5px;
+  font-style: italic;
+}
+
