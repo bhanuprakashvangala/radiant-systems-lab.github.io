@@ -39,7 +39,19 @@ You can also find our articles on our
           <li class="pub-entry">
             <span class="pub-title">{{ p.title }}</span><br>
             <span class="pub-authors">{{ p.Authors }}</span><br>
-            <em>{{ p.venue }}</em>
+            <em>
+              {% if p.Book %}
+                {{ p.Book }}
+              {% elsif p.Journal %}
+                {{ p.Journal }}
+              {% elsif p.Conference %}
+                {{ p.Conference }}
+              {% elsif p.Publisher %}
+                {{ p.Publisher }}
+              {% elsif p.venue %}
+                {{ p.venue }}
+              {% endif %}
+            </em>
             <div class="pub-icons">
               {% if p.Description %}
                 <a href="javascript:void(0);" onclick="toggleSection('tab-abs-{{ p.id }}')" class="pub-action"><i class="fas fa-file-alt"></i> Abstract</a>
@@ -67,7 +79,17 @@ You can also find our articles on our
             <pre id="tab-bib-{{ p.id }}" class="pub-bibtex">@article{ {{ p.id }},
   title = { {{ p.title }} },
   author = { {{ p.bibAuthors | default: p.Authors }} },
-  {% if p.venue %}journal = { {{ p.venue }} },{% endif %}
+  {% if p.Journal %}
+  journal = { {{ p.Journal }} },
+  {% elsif p.Book %}
+  book = { {{ p.Book }} },
+  {% elsif p.Conference %}
+  conference = { {{ p.Conference }} },
+  {% elsif p.Publisher %}
+  publisher = { {{ p.Publisher }} },
+  {% elsif p.venue %}
+  journal = { {{ p.venue }} },
+  {% endif %}
   year = {{ p.Year }},
 }</pre>
           </li>
