@@ -3,8 +3,7 @@
 body { font-family: 'Roboto', sans-serif; }
 
 .nav.nav-tabs { margin-bottom: 20px; }
-.pub-type { display: none; }
-.pub-type.active { display: block; }
+#pub-tabs li.active a { font-weight: 600; }
 
 .pubyear {
   font-size: 1.8em;
@@ -28,13 +27,13 @@ body { font-family: 'Roboto', sans-serif; }
 }
 
 .pub-title {
-  margin: 0;
+  margin: 0 0 6px;
   font-size: 1.3em;
   font-weight: 600;
 }
 
 .pub-authors {
-  margin: 4px 0;
+  margin: 0 0 4px;
   color: #555;
 }
 
@@ -62,6 +61,8 @@ body { font-family: 'Roboto', sans-serif; }
   font-size: 0.9em;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
+  text-decoration: none;
+  color: #333;
 }
 
 .pub-action:hover {
