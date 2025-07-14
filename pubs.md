@@ -36,10 +36,11 @@ You can also find my articles on my
   {% if pub.Year == year %}
     <li>
       {{ pub.title }}<br>
+      <span class="pub-authors">{{ pub.Authors }}</span><br>
       <em>{% if pub.Book %}{{ pub.Book }}{% elsif pub.Journal %}{{ pub.Journal }}{% elsif pub.Conference %}{{ pub.Conference }}{% elsif pub.Publisher %}{{ pub.Publisher }}{% endif %}</em>
       <div class="pub-icons">
-        {% if pub.abstract_link %}
-          <a href="{{ pub.abstract_link }}" target="_blank"><i class="fas fa-file-alt"></i></a>
+        {% if pub.Description %}
+          <a href="javascript:void(0);" onclick="toggleAbstract('{{ pub.id }}')"><i class="fas fa-file-alt"></i></a>
         {% else %}
           <i class="fas fa-file-alt disabled"></i>
         {% endif %}
@@ -60,6 +61,11 @@ You can also find my articles on my
           {% endif %}
         {% endif %}
       </div>
+      {% if pub.Description %}
+      <div id="abs-{{ pub.id }}" class="pub-abstract" style="display:none;">
+        {{ pub.Description }}
+      </div>
+      {% endif %}
     </li>
   {% endif %}
 {% endfor %}
@@ -79,10 +85,11 @@ You can also find my articles on my
         {% if p.year == y %}
           <li>
             {{ p.title }}<br>
+            <span class="pub-authors">{{ p.Authors }}</span><br>
             <em>{{ p.venue }}</em>
             <div class="pub-icons">
-              {% if p.abstract_link %}
-                <a href="{{ p.abstract_link }}" target="_blank"><i class="fas fa-file-alt"></i></a>
+              {% if p.Description %}
+                <a href="javascript:void(0);" onclick="toggleAbstract('{{ p.id }}')"><i class="fas fa-file-alt"></i></a>
               {% else %}
                 <i class="fas fa-file-alt disabled"></i>
               {% endif %}
@@ -103,6 +110,11 @@ You can also find my articles on my
                 {% endif %}
               {% endif %}
             </div>
+            {% if p.Description %}
+            <div id="abs-{{ p.id }}" class="pub-abstract" style="display:none;">
+              {{ p.Description }}
+            </div>
+            {% endif %}
           </li>
         {% endif %}
       {% endfor %}
@@ -128,6 +140,16 @@ function showPubType(type){
       li.classList.remove('active');
     }
   });
+}
+
+function toggleAbstract(id){
+  var el = document.getElementById('abs-' + id);
+  if(!el) return;
+  if(el.style.display === 'none' || el.style.display === ''){
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
 }
 </script>
 
