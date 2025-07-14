@@ -63,3 +63,35 @@
   opacity: 1;
   max-height: 1000px;
 }
+
+.pub-entry {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.pub-title {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.pub-icons {
+  border-top: 1px solid #ccc;
+  padding-top: 8px;
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+}
+
+.pub-action {
+  border: 1px dashed #888;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+.pub-abstract,
+.pub-bibtex {
+  border-left: 4px solid #999;
+}
+
