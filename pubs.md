@@ -4,7 +4,7 @@ title: Publications
 ---
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="{{ BASE_PATH }}/assets/css/publications.css">
+<link rel="stylesheet" href="{{ ASSET_PATH }}/css/publications.css">
 
 
 
@@ -41,33 +41,31 @@ You can also find my articles on my
       <div class="pub-icons">
         {% if pub.Description %}
 
-          <a href="javascript:void(0);" onclick="toggleSection('abs-{{ pub.id }}')"><i class="fas fa-file-alt"></i></a>
-
-          <a href="javascript:void(0);" onclick="toggleAbstract('{{ pub.id }}')"><i class="fas fa-file-alt"></i></a>
+          <a href="javascript:void(0);" onclick="toggleSection('abs-{{ pub.id }}')" class="pub-action"><i class="fas fa-file-alt"></i> Abstract</a>
 
         {% else %}
           <i class="fas fa-file-alt disabled"></i>
         {% endif %}
-        <a href="javascript:void(0);" onclick="toggleSection('bib-{{ pub.id }}')"><i class="fas fa-code"></i></a>
+        <a href="javascript:void(0);" onclick="toggleSection('bib-{{ pub.id }}')" class="pub-action"><i class="fas fa-code"></i> BibTeX</a>
         {% if pub.pdf_link %}
-          <a href="{{ pub.pdf_link }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
+          <a href="{{ pub.pdf_link }}" target="_blank" class="pub-action"><i class="fas fa-file-pdf"></i> PDF</a>
         {% else %}
           {% assign pdfName = pub.id | split: '-' | last | append: '.pdf' | prepend: '/pdfs/pdfs/pubs/' %}
           {% assign hasPdf = site.static_files | map:'path' | join:' ' | contains: pdfName %}
           {% if hasPdf %}
-            <a href="{{ pdfName }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
+            <a href="{{ pdfName }}" target="_blank" class="pub-action"><i class="fas fa-file-pdf"></i> PDF</a>
           {% else %}
             <i class="fas fa-file-pdf disabled"></i>
           {% endif %}
         {% endif %}
       </div>
       {% if pub.Description %}
-      <div id="abs-{{ pub.id }}" class="pub-abstract" style="display:none;">
-        {{ pub.Description }}
+      <div id="abs-{{ pub.id }}" class="pub-abstract">
+        <strong>Abstract:</strong> {{ pub.Description }}
       </div>
       {% endif %}
 
-      <pre id="bib-{{ pub.id }}" class="pub-bibtex" style="display:none;">@article{ {{ pub.id }},
+      <pre id="bib-{{ pub.id }}" class="pub-bibtex">@article{ {{ pub.id }},
   title = { {{ pub.title }} },
   author = { {{ pub.bibAuthors | default: pub.Authors }} },
   {% if pub.Journal %}journal = { {{ pub.Journal }} },{% endif %}
@@ -100,33 +98,31 @@ You can also find my articles on my
             <div class="pub-icons">
               {% if p.Description %}
 
-                <a href="javascript:void(0);" onclick="toggleSection('abs-{{ p.id }}')"><i class="fas fa-file-alt"></i></a>
-
-                <a href="javascript:void(0);" onclick="toggleAbstract('{{ p.id }}')"><i class="fas fa-file-alt"></i></a>
+                <a href="javascript:void(0);" onclick="toggleSection('abs-{{ p.id }}')" class="pub-action"><i class="fas fa-file-alt"></i> Abstract</a>
 
               {% else %}
                 <i class="fas fa-file-alt disabled"></i>
               {% endif %}
-              <a href="javascript:void(0);" onclick="toggleSection('bib-{{ p.id }}')"><i class="fas fa-code"></i></a>
+              <a href="javascript:void(0);" onclick="toggleSection('bib-{{ p.id }}')" class="pub-action"><i class="fas fa-code"></i> BibTeX</a>
               {% if p.pdf_link %}
-                <a href="{{ p.pdf_link }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                <a href="{{ p.pdf_link }}" target="_blank" class="pub-action"><i class="fas fa-file-pdf"></i> PDF</a>
               {% else %}
                 {% assign pdfName = p.id | split: '-' | last | append: '.pdf' | prepend: '/pdfs/pdfs/pubs/' %}
                 {% assign hasPdf = site.static_files | map:'path' | join:' ' | contains: pdfName %}
                 {% if hasPdf %}
-                  <a href="{{ pdfName }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                  <a href="{{ pdfName }}" target="_blank" class="pub-action"><i class="fas fa-file-pdf"></i> PDF</a>
                 {% else %}
                   <i class="fas fa-file-pdf disabled"></i>
                 {% endif %}
               {% endif %}
             </div>
             {% if p.Description %}
-            <div id="abs-{{ p.id }}" class="pub-abstract" style="display:none;">
-              {{ p.Description }}
+            <div id="abs-{{ p.id }}" class="pub-abstract">
+              <strong>Abstract:</strong> {{ p.Description }}
             </div>
             {% endif %}
 
-            <pre id="bib-{{ p.id }}" class="pub-bibtex" style="display:none;">@article{ {{ p.id }},
+            <pre id="bib-{{ p.id }}" class="pub-bibtex">@article{ {{ p.id }},
   title = { {{ p.title }} },
   author = { {{ p.bibAuthors | default: p.Authors }} },
   {% if p.venue %}journal = { {{ p.venue }} },{% endif %}
@@ -159,14 +155,13 @@ function showPubType(type){
   });
 }
 
-function toggleAbstract(id){
-  var el = document.getElementById('abs-' + id);
-
+function toggleSection(sectionId){
+  var el = document.getElementById(sectionId);
   if(!el) return;
-  if(el.style.display === 'none' || el.style.display === ''){
-    el.style.display = 'block';
+  if(el.classList.contains('show')){
+    el.classList.remove('show');
   } else {
-    el.style.display = 'none';
+    el.classList.add('show');
   }
 }
 </script>
