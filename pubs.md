@@ -34,8 +34,8 @@ You can also find my articles on my
 <ol>
 {% for pub in publications %}
   {% if pub.Year == year %}
-    <li>
-      {{ pub.title }}<br>
+    <li class="pub-entry">
+      <span class="pub-title">{{ pub.title }}</span><br>
       <span class="pub-authors">{{ pub.Authors }}</span><br>
       <em>{% if pub.Book %}{{ pub.Book }}{% elsif pub.Journal %}{{ pub.Journal }}{% elsif pub.Conference %}{{ pub.Conference }}{% elsif pub.Publisher %}{{ pub.Publisher }}{% endif %}</em>
       <div class="pub-icons">
@@ -91,8 +91,8 @@ You can also find my articles on my
       <ol>
       {% for p in pubs_of_type %}
         {% if p.year == y %}
-          <li>
-            {{ p.title }}<br>
+          <li class="pub-entry">
+            <span class="pub-title">{{ p.title }}</span><br>
             <span class="pub-authors">{{ p.Authors }}</span><br>
             <em>{{ p.venue }}</em>
             <div class="pub-icons">
