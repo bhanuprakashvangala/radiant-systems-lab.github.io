@@ -55,6 +55,11 @@ Improving data-intensive, distributed, and parallel science workflows with repro
         }
         .research_abstract {
             font-size: 17px;
+            margin-bottom: 8px;
+        }
+        .research_abstract summary {
+            cursor: pointer;
+            font-weight: bold;
         }
         .research_citation {
             font-size: 15px;
@@ -97,8 +102,8 @@ Improving data-intensive, distributed, and parallel science workflows with repro
             </div>
             <div class="media-body">
                 <h4 class="media-heading">{{r.project}}</h4>
-                <p class="research_abstract">
-                {{r.abstract}}</p>
+                <details class="research_abstract"><summary>Abstract</summary>
+                {{r.abstract}}</details>
                 <p class="research_citation">
                 <strong>{{r.title}}. </strong> {{r.authors}}  <strong><i>, {{r.publication}}</i></strong>, {{r.year}}. 
                 <!-- <a class="btn btn-primary btn-xs btn-research-paper" href="{{r.link}}" role="button">Paper</a> -->
