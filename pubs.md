@@ -11,11 +11,11 @@ title: Publications
 <div class="navbar">
     <div class="navbar-inner">
         <ul id="pub-tabs" class="nav nav-tabs">
-            <li id="tab-article" class="active"><a href="javascript:showPubType('article')">Articles</a></li>
-            <li id="tab-chapter"><a href="javascript:showPubType('chapter')">Chapters</a></li>
-            <li id="tab-dissertation"><a href="javascript:showPubType('dissertation')">Dissertations</a></li>
-            <li id="tab-editorial"><a href="javascript:showPubType('editorial')">Editorials</a></li>
-            <li id="tab-other"><a href="javascript:showPubType('other')">Others</a></li>
+            <li id="tab-article" class="active"><a href="javascript:showPubType('Article')">Articles</a></li>
+            <li id="tab-chapter"><a href="javascript:showPubType('Chapter')">Chapters</a></li>
+            <li id="tab-dissertation"><a href="javascript:showPubType('Dissertation')">Dissertations</a></li>
+            <li id="tab-editorial"><a href="javascript:showPubType('Editorial')">Editorials</a></li>
+            <li id="tab-other"><a href="javascript:showPubType('Other')">Others</a></li>
         </ul>
     </div>
 </div>
@@ -26,16 +26,16 @@ You can also find our articles on our
 </p>
 
 <div id="pub-lists">
-{% assign pub_types = "article,chapter,dissertation,editorial,other" | split: "," %}
+{% assign pub_types = "Article,Chapter,Dissertation,Editorial,Other" | split: "," %}
 {% for t in pub_types %}
-  <div id="pub-{{ t }}" class="pub-type{% if forloop.first %} active{% endif %}">
-    {% assign pubs_of_type = site.data.publications | where: 'type', t %}
-    {% assign years = pubs_of_type | map: 'year' | uniq | sort | reverse %}
+  <div id="pub-{{ t | downcase }}" class="pub-type{% if forloop.first %} active{% endif %}">
+    {% assign pubs_of_type = site.data.publications | where: 'Type', t %}
+    {% assign years = pubs_of_type | map: 'Year' | uniq | sort | reverse %}
     {% for y in years %}
       <h3 class="pubyear">{{ y }}</h3>
       <ol>
       {% for p in pubs_of_type %}
-        {% if p.year == y %}
+        {% if p.Year == y %}
           <li class="pub-entry">
             <span class="pub-title">{{ p.title }}</span><br>
             <span class="pub-authors">{{ p.Authors }}</span><br>
@@ -68,7 +68,7 @@ You can also find our articles on our
   title = { {{ p.title }} },
   author = { {{ p.bibAuthors | default: p.Authors }} },
   {% if p.venue %}journal = { {{ p.venue }} },{% endif %}
-  year = {{ p.year }},
+  year = {{ p.Year }},
 }</pre>
           </li>
         {% endif %}
@@ -82,14 +82,14 @@ You can also find our articles on our
 <script>
 function showPubType(type){
   document.querySelectorAll('.pub-type').forEach(function(div){
-    if(div.id === 'pub-'+type){
+    if(div.id === 'pub-'+type.toLowerCase()){
       div.classList.add('active');
     } else {
       div.classList.remove('active');
     }
   });
   document.querySelectorAll('#pub-tabs li').forEach(function(li){
-    if(li.id === 'tab-'+type){
+    if(li.id === 'tab-'+type.toLowerCase()){
       li.classList.add('active');
     } else {
       li.classList.remove('active');
